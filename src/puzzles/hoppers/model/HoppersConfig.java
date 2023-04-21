@@ -95,20 +95,69 @@ public class HoppersConfig implements Configuration{
      * @return collection of configurations representing valid moves
      */
     public List<Configuration> getMoves(int r, int c, boolean oddRow){
+        List <Configuration> moves = new ArrayList<>();
         if (oddRow){
             //8 moves that can be made
+            //
+            //top left jump
+            if (r-2 >= 0 && c-2 >= 0 && this.graph[r-2][c-2] == '.'){
+                HoppersConfig successor = new HoppersConfig(this);
+
+                //validate or sum idk
+                //if possible move, add to moves list
+            }
+            //north jump
+            if (r-2 >= 0 && this.graph[r-2][c] == '.'){
+                //validate??
+                //if possible move, add to moves list
+            }
+            //top right jump
+            if (r-2 >= 0 && c+2 < this.columns && this.graph[r-2][c+2] == '.'){
+                //validate
+                //if possible move, add to moves list
+            }
+            //west jump
+            if (c-2 >= 0 && this.graph[r][c-2] == '.'){
+                //validate
+                //if possible move, add to moves list
+            }
+            //east jump
+            if (c+2 < this.columns && this.graph[r][c+2] == '.'){
+                //validate
+                //if possible move, add to moves list
+            }
+            //bottom left jump
+            if (r+2 < this.rows && c-2 >= 0 && this.graph[r+2][c-2] == '.'){
+                //validate
+                //if possible move, add to moves list
+            }
+            //south jump
+            if (r+2 < this.rows && this.graph[r+2][c] == '.'){
+                //validate
+                //if possible move, add to moves list
+            }
+            //bottom right jump
+            if (r+2 < this.rows && c+2 < this.columns && this.graph[r+2][c+2] == '.'){
+                //validate
+                //if possible move, add to moves list
+            }
+
         } else {
             //only 4 moves that can be made
         }
         return null;
     }
 
+
     /**
      * checks to see if a given configuration is valid and if not,
      * prunes the configuration.
      * @return true or false
      */
-    public boolean isValid(){
+    public boolean isValid(int r, int c){
+        //checks if a frog has been jumped over. if there is no frog to jump over, the move
+        //isn't valid. if there is a frog, check if it is red or green. If the frog is green,
+        //the config is valid and that one can be removed. If the frog is red, the move is not valid.
         return false;
     }
 
