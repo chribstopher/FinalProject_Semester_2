@@ -11,13 +11,16 @@ import java.util.List;
 
 // TODO: implement your HoppersConfig for the common solver
 
+/**
+ *
+ * @author Christopher Rose
+ */
+
 public class HoppersConfig implements Configuration{
     private static int rows;
     private static int columns;
     private char[][] graph;
     private int pieceCount;
-    private int col;
-    private int row;
 
     public HoppersConfig(String filename) throws IOException {
         try (BufferedReader in = new BufferedReader(new FileReader(filename))){
@@ -82,12 +85,11 @@ public class HoppersConfig implements Configuration{
             for (int c = 0; r < columns; c++){
                 if (isFrog(r, c)){
                     List<Configuration> moves = getMoves(r, c, oddRow);
-                    //after the list is gotten maybe just add it to the neighbors?
-                    //will have to see after get moves is made.
+                    neighbors.addAll(moves);
                 }
             }
         }
-
+        return neighbors;
     }
 
     /**
@@ -102,63 +104,144 @@ public class HoppersConfig implements Configuration{
             //top left jump
             if (r-2 >= 0 && c-2 >= 0 && this.graph[r-2][c-2] == '.'){
                 HoppersConfig successor = new HoppersConfig(this);
-
-                //validate or sum idk
-                //if possible move, add to moves list
+                if (this.graph[r-1][c-1] == 'G'){
+                    //removing frog that has been jumped over and decrementing
+                    //piece count by 1
+                    successor.graph[r-1][c-1] = '.';
+                    successor.pieceCount -= 1;
+                    //moving the frog to final position
+                    successor.graph[r-2][c-2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
             }
             //north jump
             if (r-2 >= 0 && this.graph[r-2][c] == '.'){
-                //validate??
-                //if possible move, add to moves list
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r-1][c] == 'G'){
+                    successor.graph[r-1][c] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r-2][c] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
             }
             //top right jump
             if (r-2 >= 0 && c+2 < this.columns && this.graph[r-2][c+2] == '.'){
-                //validate
-                //if possible move, add to moves list
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r-1][c+1] == 'G') {
+                    successor.graph[r - 1][c + 1] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r - 2][c + 2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
             }
             //west jump
             if (c-2 >= 0 && this.graph[r][c-2] == '.'){
-                //validate
-                //if possible move, add to moves list
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r][c-1] == 'G'){
+                    successor.graph[r][c-1] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r][c-2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
             }
             //east jump
             if (c+2 < this.columns && this.graph[r][c+2] == '.'){
-                //validate
-                //if possible move, add to moves list
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r][c+1] == 'G'){
+                    successor.graph[r][c+1] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r][c+2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
             }
             //bottom left jump
             if (r+2 < this.rows && c-2 >= 0 && this.graph[r+2][c-2] == '.'){
-                //validate
-                //if possible move, add to moves list
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r+1][c-1] == 'G'){
+                    successor.graph[r+1][c-1] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r+2][c-2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
             }
             //south jump
             if (r+2 < this.rows && this.graph[r+2][c] == '.'){
-                //validate
-                //if possible move, add to moves list
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r+1][c] == 'G'){
+                    successor.graph[r+1][c] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r+2][c] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
             }
             //bottom right jump
             if (r+2 < this.rows && c+2 < this.columns && this.graph[r+2][c+2] == '.'){
-                //validate
-                //if possible move, add to moves list
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r+1][c+1] == 'G'){
+                    successor.graph[r+1][c+1] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r+2][c+2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
             }
 
         } else {
             //only 4 moves that can be made
+            //
+            //top left jump
+            if (r-2 >= 0 && c-2 >= 0 && this.graph[r-2][c-2] == '.') {
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r - 1][c - 1] == 'G') {
+                    successor.graph[r - 1][c - 1] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r - 2][c - 2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
+            }
+            //top right jump
+            if (r-2 >= 0 && c+2 < this.columns && this.graph[r-2][c+2] == '.'){
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r-1][c+1] == 'G') {
+                    successor.graph[r - 1][c + 1] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r - 2][c + 2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
+            }
+            //bottom left jump
+            if (r+2 < this.rows && c-2 >= 0 && this.graph[r+2][c-2] == '.'){
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r+1][c-1] == 'G'){
+                    successor.graph[r+1][c-1] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r+2][c-2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
+            }
+            //bottom right jump
+            if (r+2 < this.rows && c+2 < this.columns && this.graph[r+2][c+2] == '.'){
+                HoppersConfig successor = new HoppersConfig(this);
+                if (this.graph[r+1][c+1] == 'G'){
+                    successor.graph[r+1][c+1] = '.';
+                    successor.pieceCount -= 1;
+                    successor.graph[r+2][c+2] = this.graph[r][c];
+                    successor.graph[r][c] = '.';
+                    moves.add(successor);
+                }
+            }
         }
-        return null;
-    }
-
-
-    /**
-     * checks to see if a given configuration is valid and if not,
-     * prunes the configuration.
-     * @return true or false
-     */
-    public boolean isValid(int r, int c){
-        //checks if a frog has been jumped over. if there is no frog to jump over, the move
-        //isn't valid. if there is a frog, check if it is red or green. If the frog is green,
-        //the config is valid and that one can be removed. If the frog is red, the move is not valid.
-        return false;
+        return moves;
     }
 
     /**
@@ -183,4 +266,5 @@ public class HoppersConfig implements Configuration{
         }
         return availableSpaces % 2 != 0;
     }
+
 }

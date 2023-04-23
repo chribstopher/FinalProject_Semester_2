@@ -16,14 +16,14 @@ public class Strings {
             System.out.println("Start: " + args[0] + ", End: " + args[1]);
             Configuration startString = new StringsConfig(args[0], args[1]);
             Solver puzzleSolver = new Solver();
-            String[] path = puzzleSolver.getSolution(startString).toArray(new String[0]);
+            Configuration[] path = puzzleSolver.getSolution(startString).toArray(new Configuration[0]);
             System.out.println("Total Configs: " + puzzleSolver.getConfigs());
             System.out.println("Unique Configs: " + puzzleSolver.getUniqueConfigs());
             if (path.length == 0){
                 System.out.println("No solution");
             } else {
                 for (int step = 0; step < path.length; step++){
-                    System.out.println("Step " + step + ": " + path[step]);
+                    System.out.println("Step " + step + ": " + path[step].toString());
                 }
             }
         }

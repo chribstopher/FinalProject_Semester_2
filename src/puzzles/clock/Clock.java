@@ -12,14 +12,14 @@ public class Clock {
             Configuration startClock = new ClockConfig(Integer.parseInt(args[1]), Integer.parseInt(args[2]),
                     Integer.parseInt(args[1]), Integer.parseInt(args[0]));
             Solver puzzleSolver = new Solver();
-            String[] path = puzzleSolver.getSolution(startClock).toArray(new String[0]);
+            Configuration[] path = puzzleSolver.getSolution(startClock).toArray(new Configuration[0]);
             System.out.println("Total Configs: " + puzzleSolver.getConfigs());
             System.out.println("Unique Configs: " + puzzleSolver.getUniqueConfigs());
             if (path.length == 0){
                 System.out.println("No solution");
             } else {
                 for (int step = 0; step < path.length; step++){
-                    System.out.println("Step " + step + ": " + path[step]);
+                    System.out.println("Step " + step + ": " + path[step].toString());
                 }
             }
         }

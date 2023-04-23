@@ -24,7 +24,7 @@ public class Solver {
      * @param start the starting configuration
      * @return the shortest path to the solution
      */
-    public Collection<String> getSolution (Configuration start){
+    public Collection<Configuration> getSolution (Configuration start){
 
         //creating the visitation queue
         List<Configuration> queue = new LinkedList<>();
@@ -60,10 +60,10 @@ public class Solver {
      * @param start the starting configuration
      * @return the shortest path in string form
      */
-    public List<String> constructPath(Map<Configuration, Configuration> predecessors,
+    public List<Configuration> constructPath(Map<Configuration, Configuration> predecessors,
                                       Configuration start){
         //Creating the empty linkedlist for the path
-        List<String> path = new LinkedList<>();
+        List<Configuration> path = new LinkedList<>();
 
         //checking if predecessor map contains the solution config
         boolean hasSolution = false;
@@ -77,10 +77,10 @@ public class Solver {
         if (hasSolution){
             Configuration currConfig = end;
             while (currConfig != start) {
-                path.add(0, currConfig.toString());
+                path.add(0, currConfig);
                 currConfig = predecessors.get(currConfig);
             }
-            path.add(0, start.toString());
+            path.add(0, start);
         }
         return path;
     }
