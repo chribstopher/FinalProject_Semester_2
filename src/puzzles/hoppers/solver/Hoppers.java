@@ -1,5 +1,6 @@
 package puzzles.hoppers.solver;
 
+import puzzles.common.solver.Configuration;
 import puzzles.common.solver.Solver;
 import puzzles.hoppers.model.HoppersConfig;
 
@@ -12,10 +13,19 @@ public class Hoppers {
         } else{
             System.out.println("File: " + args[0]);
             HoppersConfig startConfig = new HoppersConfig(args[0]);
-
+            System.out.println(startConfig.toString());
             Solver puzzleSolver = new Solver();
-            String[] path = puzzleSolver.getSolution(startConfig).toArray(new String[0]);
-
+            Configuration[] path = puzzleSolver.getSolution(startConfig).toArray(new Configuration[0]);
+            System.out.println("Total Configs: " + puzzleSolver.getConfigs());
+            System.out.println("Unique Configs: " + puzzleSolver.getUniqueConfigs());
+            if (path.length == 0){
+                System.out.println("No solution");
+            } else {
+                for (int step = 0; step < path.length; step++){
+                    System.out.println("Step " + step + ": ");
+                    System.out.println(path[step].toString());
+                }
+            }
         }
     }
 }

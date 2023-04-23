@@ -17,8 +17,8 @@ import java.util.List;
  */
 
 public class HoppersConfig implements Configuration{
-    private static int rows;
-    private static int columns;
+    private int rows;
+    private int columns;
     private char[][] graph;
     private int pieceCount;
 
@@ -27,13 +27,13 @@ public class HoppersConfig implements Configuration{
             //getting rows and column dimensions
             String[] dimensions = in.readLine().split("");
             this.rows = Integer.parseInt(dimensions[0]);
-            this.columns = Integer.parseInt(dimensions[1]);
+            this.columns = Integer.parseInt(dimensions[2]);
             this.graph = new char[rows][columns];
             //building the graph
             //piece count will be used for isSolution
             this.pieceCount = 0;
             for (int r = 0; r < rows; r++){
-                String[] rowContents = in.readLine().split("");
+                String[] rowContents = in.readLine().split(" ");
                 for (int c = 0; c < columns; c++){
                     char content = rowContents[c].charAt(0);
                     if (content == 'G' || content == 'R'){
@@ -70,7 +70,19 @@ public class HoppersConfig implements Configuration{
      */
     @Override
     public boolean isSolution() {
-        return this.pieceCount == 1;
+        int greenFrogs = 0;
+        int redFrogs = 0;
+        for (int r = 0; r < rows; r++){
+            for (int c = 0; c < columns; c++){
+                if (graph[r][c] == 'G'){
+                    greenFrogs += 1;
+                }
+                if (graph[r][c] == 'R'){
+                    redFrogs += 1;
+                }
+            }
+        }
+        return greenFrogs == 0 && redFrogs == 1;
     }
 
     /**
@@ -82,7 +94,7 @@ public class HoppersConfig implements Configuration{
         List<Configuration> neighbors = new ArrayList<>();
         for (int r = 0; r < rows; r++){
             boolean oddRow = isOddRow(r);
-            for (int c = 0; r < columns; c++){
+            for (int c = 0; c < columns; c++){
                 if (isFrog(r, c)){
                     List<Configuration> moves = getMoves(r, c, oddRow);
                     neighbors.addAll(moves);
@@ -116,12 +128,12 @@ public class HoppersConfig implements Configuration{
                 }
             }
             //north jump
-            if (r-2 >= 0 && this.graph[r-2][c] == '.'){
+            if (r-4 >= 0 && this.graph[r-4][c] == '.'){
                 HoppersConfig successor = new HoppersConfig(this);
-                if (this.graph[r-1][c] == 'G'){
-                    successor.graph[r-1][c] = '.';
+                if (this.graph[r-2][c] == 'G'){
+                    successor.graph[r-2][c] = '.';
                     successor.pieceCount -= 1;
-                    successor.graph[r-2][c] = this.graph[r][c];
+                    successor.graph[r-4][c] = this.graph[r][c];
                     successor.graph[r][c] = '.';
                     moves.add(successor);
                 }
@@ -138,23 +150,23 @@ public class HoppersConfig implements Configuration{
                 }
             }
             //west jump
-            if (c-2 >= 0 && this.graph[r][c-2] == '.'){
+            if (c-4 >= 0 && this.graph[r][c-4] == '.'){
                 HoppersConfig successor = new HoppersConfig(this);
-                if (this.graph[r][c-1] == 'G'){
-                    successor.graph[r][c-1] = '.';
+                if (this.graph[r][c-2] == 'G'){
+                    successor.graph[r][c-2] = '.';
                     successor.pieceCount -= 1;
-                    successor.graph[r][c-2] = this.graph[r][c];
+                    successor.graph[r][c-4] = this.graph[r][c];
                     successor.graph[r][c] = '.';
                     moves.add(successor);
                 }
             }
             //east jump
-            if (c+2 < this.columns && this.graph[r][c+2] == '.'){
+            if (c+4 < this.columns && this.graph[r][c+4] == '.'){
                 HoppersConfig successor = new HoppersConfig(this);
-                if (this.graph[r][c+1] == 'G'){
-                    successor.graph[r][c+1] = '.';
+                if (this.graph[r][c+2] == 'G'){
+                    successor.graph[r][c+2] = '.';
                     successor.pieceCount -= 1;
-                    successor.graph[r][c+2] = this.graph[r][c];
+                    successor.graph[r][c+4] = this.graph[r][c];
                     successor.graph[r][c] = '.';
                     moves.add(successor);
                 }
@@ -171,12 +183,12 @@ public class HoppersConfig implements Configuration{
                 }
             }
             //south jump
-            if (r+2 < this.rows && this.graph[r+2][c] == '.'){
+            if (r+4 < this.rows && this.graph[r+4][c] == '.'){
                 HoppersConfig successor = new HoppersConfig(this);
-                if (this.graph[r+1][c] == 'G'){
-                    successor.graph[r+1][c] = '.';
+                if (this.graph[r+2][c] == 'G'){
+                    successor.graph[r+2][c] = '.';
                     successor.pieceCount -= 1;
-                    successor.graph[r+2][c] = this.graph[r][c];
+                    successor.graph[r+4][c] = this.graph[r][c];
                     successor.graph[r][c] = '.';
                     moves.add(successor);
                 }
@@ -265,6 +277,21 @@ public class HoppersConfig implements Configuration{
             }
         }
         return availableSpaces % 2 != 0;
+    }
+    @Override
+    public String toString(){
+        StringBuilder result = new StringBuilder("");
+        for (int r = 0; r < rows; r++){
+            for(int c = 0; c < columns; c++){
+                if (c == columns-1){
+                    result.append(this.graph[r][c]).append(System.lineSeparator());
+                } else{
+                    result.append(this.graph[r][c]).append(" ");
+                }
+            }
+        }
+
+        return result.toString();
     }
 
 }
