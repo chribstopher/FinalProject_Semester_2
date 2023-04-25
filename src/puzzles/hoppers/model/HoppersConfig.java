@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -110,7 +111,8 @@ public class HoppersConfig implements Configuration{
      */
     public List<Configuration> getMoves(int r, int c, boolean oddRow){
         List <Configuration> moves = new ArrayList<>();
-        if (oddRow){
+
+        if (r % 2 == 0){
             //8 moves that can be made
             //
             //top left jump
@@ -294,4 +296,16 @@ public class HoppersConfig implements Configuration{
         return result.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        HoppersConfig that = (HoppersConfig) o;
+        return Arrays.deepEquals(graph, that.graph);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(graph);
+    }
 }
