@@ -280,6 +280,11 @@ public class HoppersConfig implements Configuration{
         }
         return availableSpaces % 2 != 0;
     }
+
+    /**
+     * takes the Hoppers Config and turns it into its string representation
+     * @return the printed version of the 2D array
+     */
     @Override
     public String toString(){
         StringBuilder result = new StringBuilder("");
@@ -296,6 +301,11 @@ public class HoppersConfig implements Configuration{
         return result.toString();
     }
 
+    /**
+     * equals method for the config to be used in the solver
+     * @param o other config
+     * @return whether they are equal or not
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -304,8 +314,28 @@ public class HoppersConfig implements Configuration{
         return Arrays.deepEquals(graph, that.graph);
     }
 
+    /**
+     * hashcode method for the config. used in the solver
+     * @return
+     */
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(graph);
+    }
+
+    /**
+     * getter method for rows
+     * @return amount of rows in config
+     */
+    public int getRows(){
+        return rows;
+    }
+
+    /**
+     * getter method for columns
+     * @return amount of columns in config
+     */
+    public int getColumns(){
+        return columns;
     }
 }
