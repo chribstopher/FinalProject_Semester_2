@@ -17,6 +17,10 @@ public class HoppersModel {
     private HoppersConfig currentConfig;
     private String filename;
     private Solver puzzleSolver;
+    private int initialR;
+    private int initialC;
+    private int secondR;
+    private int secondC;
 
     /*** enum of the different states the game can be in at a time*/
     public enum GameState{
@@ -63,6 +67,10 @@ public class HoppersModel {
     public HoppersModel(String filename) throws IOException {
         currentConfig = new HoppersConfig(filename);
         puzzleSolver = new Solver();
+        this.initialR = -1;
+        this.initialC = -1;
+        this.secondR = -1;
+        this.secondC = -1;
         this.filename = filename;
     }
 
@@ -110,29 +118,10 @@ public class HoppersModel {
      */
     public void reset() throws IOException {
         currentConfig = new HoppersConfig(this.filename);
+        this.initialR = -1;
+        this.initialC = -1;
         this.gameState = GameState.RESET;
         alertObservers(HoppersModel.STATE_MSGS.get(this.gameState));
-    }
-
-    /**
-     * select method. user selects a frog to move and then chooses where they wish to move the frog.
-     * @param r row
-     * @param c column
-     */
-    public void initialSelect(int r, int c){
-        if (r >= 0 && r < currentConfig.getRows() && c >= 0 && c < currentConfig.getColumns()){
-            if(currentConfig.isFrog(r,c)){
-                Scanner in = new Scanner(System.in);
-                System.out.print("Where do you wish to move > ");
-                String line = in.nextLine();
-                String[] coords = line.split("\\s+");
-                move(r, c, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-            } else{
-                System.out.println("The selected coordinates do not contain a frog.");
-            }
-        } else{
-            System.out.println("Coordinates given were out of bounds.");
-        }
     }
 
     /**
@@ -198,9 +187,30 @@ public class HoppersModel {
                     gameState = GameState.ONGOING;
                 }
             }
+            initialR = -1;
+            initialC = -1;
             alertObservers(HoppersModel.STATE_MSGS.get(gameState));
         } else{
-            System.out.println("Invalid move");
+            initialR = -1;
+            initialC = -1;
+            alertObservers("Invalid move. Pick a frog and try again.");
+        }
+    }
+    public void select(int r, int c){
+        if (this.initialR != -1 && this.initialC != -1){
+            secondR = r;
+            secondC = c;
+            move(initialR, initialC, secondR, secondC);
+        }else{
+            if (r >= 0 && r < currentConfig.getRows() && c >= 0 && c < currentConfig.getColumns()){
+                if (currentConfig.isFrog(r,c)){
+                    this.initialR = r;
+                    this.initialC = c;
+                    alertObservers("Selected (" + initialR + "," + initialC + ")");
+                }
+            } else{
+                alertObservers("Invalid selection");
+            }
         }
     }
 
@@ -232,6 +242,9 @@ public class HoppersModel {
     }
     public char[][] getGraph(){
         return currentConfig.getGraph();
+    }
+    public HoppersConfig getCurrentConfig(){
+        return currentConfig;
     }
     /**
      * generates the display version of the configuration with added row and column

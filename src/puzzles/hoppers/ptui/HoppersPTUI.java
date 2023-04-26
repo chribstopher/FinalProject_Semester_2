@@ -2,7 +2,8 @@ package puzzles.hoppers.ptui;
 
 import puzzles.common.Observer;
 import puzzles.hoppers.model.HoppersModel;
-import puzzles.chess.ptui.ChessPTUI;
+import puzzles.hoppers.ptui.HoppersPTUI;
+import puzzles.hoppers.model.HoppersConfig;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -55,7 +56,7 @@ public class HoppersPTUI implements Observer<HoppersModel, String> {
                 } else if (words[0].startsWith("l")){
                     model.load(words[1]);
                 } else if (words[0].startsWith("s")){
-                    model.initialSelect(Integer.parseInt(words[1]), Integer.parseInt(words[2]));
+                    select(Integer.parseInt(words[1]), Integer.parseInt(words[2]));
                 } else if (words[0].startsWith("r")){
                     model.reset();
                 }
@@ -65,7 +66,21 @@ public class HoppersPTUI implements Observer<HoppersModel, String> {
             }
         }
     }
-
+    public void select(int r, int c){
+        if (r >= 0 && r < model.getCurrentConfig().getRows() && c >= 0 && c < model.getCurrentConfig().getColumns()){
+            if(model.getCurrentConfig().isFrog(r,c)){
+                Scanner in = new Scanner(System.in);
+                System.out.print("Where do you wish to move > ");
+                String line = in.nextLine();
+                String[] coords = line.split("\\s+");
+                model.move(r, c, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+            } else{
+                System.out.println("The selected coordinates do not contain a frog.");
+            }
+        } else{
+            System.out.println("Coordinates given were out of bounds.");
+        }
+    }
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Usage: java HoppersPTUI filename");

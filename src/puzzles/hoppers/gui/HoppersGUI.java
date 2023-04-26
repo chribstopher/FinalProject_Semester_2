@@ -10,6 +10,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.FileChooser;
+import puzzles.common.Coordinates;
 import puzzles.common.Observer;
 import puzzles.hoppers.model.HoppersModel;
 
@@ -19,6 +20,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Scanner;
 
 public class HoppersGUI extends Application implements Observer<HoppersModel, String> {
     /** The size of all icons, in square dimension */
@@ -93,6 +95,9 @@ public class HoppersGUI extends Application implements Observer<HoppersModel, St
                 boardTile.setGraphic(new ImageView(buttonImage));
                 boardTile.setMinSize(ICON_SIZE, ICON_SIZE);
                 boardTile.setMaxSize(ICON_SIZE, ICON_SIZE);
+                int row = r;
+                int column = c;
+                boardTile.setOnAction(event -> model.select(row, column));
                 this.board[r][c] = boardTile;
                 boardGrid.add(boardTile, c, r);
             }
@@ -133,6 +138,7 @@ public class HoppersGUI extends Application implements Observer<HoppersModel, St
 
         return bottom;
     }
+
     @Override
     public void update(HoppersModel hoppersModel, String msg) {
         if (!this.initialized) return;
