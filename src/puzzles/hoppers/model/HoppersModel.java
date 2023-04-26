@@ -123,4 +123,32 @@ public class HoppersModel {
     public GameState getGameState(){
         return gameState;
     }
+    public String getDisplay(){
+        StringBuilder display = new StringBuilder("");
+        for (int c = 0; c < currentConfig.getColumns(); c++){
+            if (c == currentConfig.getColumns()-1){
+                display.append(c).append(System.lineSeparator());
+            } else {
+                display.append(c).append(" ");
+            }
+        }
+        for (int c = 0; c < currentConfig.getColumns(); c++){
+            if (c == currentConfig.getColumns()-1){
+                display.append("-").append(System.lineSeparator());
+            } else {
+                display.append("-").append(" ");
+            }
+        }
+        for (int r = 0; r < currentConfig.getRows(); r++){
+            for (int c = 0; c < currentConfig.getColumns(); c++){
+                if (c == currentConfig.getColumns()-1){
+                    display.append(currentConfig.getGraph()[r][c]).append("| ").append(r).append(System.lineSeparator());
+                } else{
+                    display.append(currentConfig.getGraph()[r][c]).append(" ");
+                }
+            }
+        }
+
+        return display.toString();
+    }
 }

@@ -9,9 +9,12 @@ import java.util.Scanner;
 
 public class HoppersPTUI implements Observer<HoppersModel, String> {
     private HoppersModel model;
+    private boolean initialized;
 
     public void init(String filename) throws IOException {
+        this.initialized = false;
         this.model = new HoppersModel(filename);
+        System.out.println(model.getDisplay());
         this.model.addObserver(this);
         displayHelp();
     }
@@ -53,7 +56,7 @@ public class HoppersPTUI implements Observer<HoppersModel, String> {
             System.out.println("Usage: java HoppersPTUI filename");
         } else {
             try {
-                ChessPTUI ptui = new ChessPTUI();
+                HoppersPTUI ptui = new HoppersPTUI();
                 ptui.init(args[0]);
                 ptui.run();
             } catch (IOException ioe) {

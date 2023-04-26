@@ -338,4 +338,8 @@ public class HoppersConfig implements Configuration{
     public int getColumns(){
         return columns;
     }
+
+    public char[][] getGraph() {
+        return graph;
+    }
 }
