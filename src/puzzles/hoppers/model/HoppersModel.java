@@ -134,6 +134,16 @@ public class HoppersModel {
             System.out.println("Coordinates given were out of bounds.");
         }
     }
+
+    /**
+     * second part of the select method. Finds what possible moves there are for the initial
+     * set of coordinates. If where the user wishes to miss the frog is part of these moves, the piece
+     * is moved and the configuration is updated.
+     * @param r original row
+     * @param c original column
+     * @param r2 row to be moved to
+     * @param c2 column to be moved to
+     */
     public void move(int r, int c, int r2, int c2){
         List<Coordinates> possibleMoves = currentConfig.possibleMoves(r,c);
         Coordinates newMove = new Coordinates(r2, c2);
@@ -202,6 +212,32 @@ public class HoppersModel {
     public GameState getGameState(){
         return gameState;
     }
+
+    /**
+     * getter for rows
+     * @return row dimensions of configuration
+     */
+    public int getModelRows(){
+        return currentConfig.getRows();
+    }
+    /**
+     * getter for columns
+     * @return column dimensions of configuration
+     */
+    public int getModelColumns(){
+        return currentConfig.getColumns();
+    }
+    public String getFilename(){
+        return filename;
+    }
+    public char[][] getGraph(){
+        return currentConfig.getGraph();
+    }
+    /**
+     * generates the display version of the configuration with added row and column
+     * numbers along the top and bottom
+     * @return string representation of configuration
+     */
     public String getDisplay(){
         StringBuilder display = new StringBuilder("");
         for (int c = 0; c < currentConfig.getColumns(); c++){

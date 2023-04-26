@@ -11,10 +11,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-// TODO: implement your HoppersConfig for the common solver
-
 /**
- *
+ *Configuration for hopper
  * @author Christopher Rose
  */
 
@@ -27,9 +25,9 @@ public class HoppersConfig implements Configuration{
     public HoppersConfig(String filename) throws IOException {
         try (BufferedReader in = new BufferedReader(new FileReader(filename))){
             //getting rows and column dimensions
-            String[] dimensions = in.readLine().split("");
+            String[] dimensions = in.readLine().split("\\s+");
             this.rows = Integer.parseInt(dimensions[0]);
-            this.columns = Integer.parseInt(dimensions[2]);
+            this.columns = Integer.parseInt(dimensions[1]);
             this.graph = new char[rows][columns];
             //building the graph
             //piece count will be used for isSolution
@@ -245,6 +243,13 @@ public class HoppersConfig implements Configuration{
         }
         return moves;
     }
+
+    /**
+     * Function that is used within the PTUI to see which moves are possible from a given coordinate
+     * @param r row
+     * @param c column
+     * @return list of all the possible coordinates that a piece can move to.
+     */
     public List<Coordinates> possibleMoves(int r, int c){
         List<Coordinates> moves = new ArrayList<>();
         if (r % 2 == 0){

@@ -7,6 +7,10 @@ import puzzles.chess.ptui.ChessPTUI;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * PTUI for the Hoppers game
+ * @author Christopher Rose
+ */
 public class HoppersPTUI implements Observer<HoppersModel, String> {
     private HoppersModel model;
     private boolean initialized;
