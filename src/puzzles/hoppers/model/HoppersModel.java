@@ -117,6 +117,15 @@ public class HoppersModel {
     }
 
     /**
+     * select method. user selects a frog to move and then chooses where they wish to move the frog.
+     * @param r row
+     * @param c column
+     */
+    public void initialSelect(int r, int c){
+
+    }
+
+    /**
      * getter for the model's gameState
      * @return current gameState
      */

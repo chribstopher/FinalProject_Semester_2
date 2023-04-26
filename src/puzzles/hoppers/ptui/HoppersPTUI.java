@@ -14,16 +14,18 @@ public class HoppersPTUI implements Observer<HoppersModel, String> {
     public void init(String filename) throws IOException {
         this.initialized = false;
         this.model = new HoppersModel(filename);
-        System.out.println(model.getDisplay());
         this.model.addObserver(this);
+        System.out.println(model.getDisplay());
         displayHelp();
     }
 
     @Override
     public void update(HoppersModel model, String data) {
-        // for demonstration purposes
+        if (!this.initialized) return;
+
+        System.out.println(model.getDisplay());
+        HoppersModel.GameState gameState = model.getGameState();
         System.out.println(data);
-        System.out.println(model);
     }
 
     private void displayHelp() {
@@ -34,7 +36,8 @@ public class HoppersPTUI implements Observer<HoppersModel, String> {
         System.out.println( "r(eset)             -- reset the current game" );
     }
 
-    public void run() {
+    public void run() throws IOException {
+        this.initialized = true;
         Scanner in = new Scanner( System.in );
         for ( ; ; ) {
             System.out.print( "> " );
@@ -43,6 +46,14 @@ public class HoppersPTUI implements Observer<HoppersModel, String> {
             if (words.length > 0) {
                 if (words[0].startsWith( "q" )) {
                     break;
+                } else if (words[0].startsWith("h")){
+                    model.hint();
+                } else if (words[0].startsWith("l")){
+                    model.load(words[1]);
+                } else if (words[0].startsWith("s")){
+                    model.initialSelect(Integer.parseInt(words[1]), Integer.parseInt(words[2]));
+                } else if (words[0].startsWith("r")){
+                    model.reset();
                 }
                 else {
                     displayHelp();
