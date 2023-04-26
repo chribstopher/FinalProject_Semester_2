@@ -1,15 +1,13 @@
 package puzzles.hoppers.model;
 
+import puzzles.common.Coordinates;
 import puzzles.common.Observer;
 import puzzles.common.solver.Configuration;
 import puzzles.common.solver.Solver;
 import puzzles.hoppers.model.HoppersConfig;
 
 import java.io.IOException;
-import java.util.EnumMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class HoppersModel {
     /** the collection of observers of this model */
@@ -122,8 +120,80 @@ public class HoppersModel {
      * @param c column
      */
     public void initialSelect(int r, int c){
-
+        if (r >= 0 && r < currentConfig.getRows() && c >= 0 && c < currentConfig.getColumns()){
+            if(currentConfig.isFrog(r,c)){
+                Scanner in = new Scanner(System.in);
+                System.out.print("Where do you wish to move > ");
+                String line = in.nextLine();
+                String[] coords = line.split("\\s+");
+                move(r, c, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+            } else{
+                System.out.println("The selected coordinates do not contain a frog.");
+            }
+        } else{
+            System.out.println("Coordinates given were out of bounds.");
+        }
     }
+    public void move(int r, int c, int r2, int c2){
+        List<Coordinates> possibleMoves = currentConfig.possibleMoves(r,c);
+        Coordinates newMove = new Coordinates(r2, c2);
+        if (possibleMoves.contains(newMove)){
+            if (r2 < r){
+                if (c2 < c){
+                    currentConfig.getGraph()[r-1][c-1] = '.';
+                    currentConfig.getGraph()[r2][c2] = currentConfig.getGraph()[r][c];
+                    currentConfig.getGraph()[r][c] = '.';
+                } else if (c2 == c){
+                    currentConfig.getGraph()[r-2][c] = '.';
+                    currentConfig.getGraph()[r2][c2] = currentConfig.getGraph()[r][c];
+                    currentConfig.getGraph()[r][c] = '.';
+                } else{
+                    currentConfig.getGraph()[r-1][c+1] = '.';
+                    currentConfig.getGraph()[r2][c2] = currentConfig.getGraph()[r][c];
+                    currentConfig.getGraph()[r][c] = '.';
+                }
+            } else if (r2 == r){
+                if (c2 < c){
+                    currentConfig.getGraph()[r][c-2] = '.';
+                    currentConfig.getGraph()[r2][c2] = currentConfig.getGraph()[r][c];
+                    currentConfig.getGraph()[r][c] = '.';
+                } else{
+                    currentConfig.getGraph()[r][c+2] = '.';
+                    currentConfig.getGraph()[r2][c2] = currentConfig.getGraph()[r][c];
+                    currentConfig.getGraph()[r][c] = '.';
+                }
+            } else {
+                if (c2 < c){
+                    currentConfig.getGraph()[r+1][c-1] = '.';
+                    currentConfig.getGraph()[r2][c2] = currentConfig.getGraph()[r][c];
+                    currentConfig.getGraph()[r][c] = '.';
+                } else if (c2 == c){
+                    currentConfig.getGraph()[r+2][c] = '.';
+                    currentConfig.getGraph()[r2][c2] = currentConfig.getGraph()[r][c];
+                    currentConfig.getGraph()[r][c] = '.';
+                } else{
+                    currentConfig.getGraph()[r+1][c+1] = '.';
+                    currentConfig.getGraph()[r2][c2] = currentConfig.getGraph()[r][c];
+                    currentConfig.getGraph()[r][c] = '.';
+                }
+
+            }
+            if (currentConfig.isSolution()){
+                gameState = GameState.WON;
+            } else{
+                Configuration[] path = puzzleSolver.getSolution(currentConfig).toArray(new Configuration[0]);
+                if (path.length == 0){
+                    gameState = GameState.LOST;
+                } else{
+                    gameState = GameState.ONGOING;
+                }
+            }
+            alertObservers(HoppersModel.STATE_MSGS.get(gameState));
+        } else{
+            System.out.println("Invalid move");
+        }
+    }
+
 
     /**
      * getter for the model's gameState
